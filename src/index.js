@@ -24,64 +24,33 @@ function Square(props) {
  *****************************************************************************/
 
 class Board extends React.Component {
-// Board Constructor with 9 empty values corresponding to squares
-  constructor(props) {
-      super(props);
-      this.state = {
-        squares: Array(9).fill(null),
-        xIsNext: true,
-      };
-    }
-
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-    // Do nothing if game is done.
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-
-    // Otherwise handle normally
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext,
-    });
-  }
 
   renderSquare(i) {
     return <Square
-      value={this.state.squares[i]}
-      onClick={() => this.handleClick(i)}
+      value={this.props.squares[i]}
+      onClick={() => this.props.onClick(i, this.props.boardNum)}
     />;
   }
 
   render() {
-    const winner = calculateWinner(this.state.squares);
-    let status;
-
-    // Set status based on whether or not game is over
-    if (winner) { status = 'Winner: ' + winner; }
-    else { status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');}
-
     return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
+        <table class = {this.props.playable}>
+          <tr className="board-row">
+            <td>{this.renderSquare(0)}</td>
+            <td>{this.renderSquare(1)}</td>
+            <td>{this.renderSquare(2)}</td>
+          </tr>
+          <tr className="board-row">
+            <td> {this.renderSquare(3)} </td>
+            <td>{this.renderSquare(4)}</td>
+            <td>{this.renderSquare(5)}</td>
+          </tr>
+          <tr className="board-row">
+            <td>{this.renderSquare(6)}</td>
+            <td>{this.renderSquare(7)}</td>
+            <td>{this.renderSquare(8)}</td>
+          </tr>
+        </table>
     );
   }
 }
@@ -94,14 +63,144 @@ class Board extends React.Component {
  *****************************************************************************/
 
 class Game extends React.Component {
+
+  // Game constructor keeps track of 9 individual tic-tac-toe games
+  constructor(props) {
+      super(props);
+
+      var squares = [];
+      for (let i = 0; i < 9; i++) {
+        squares[i] = Array(9).fill(null);
+      }
+
+      this.state = {
+        board: squares,
+        boardPlayable: Array(9).fill("1"),
+        xIsNext: true,
+      };
+    }
+
+    handleClick(i, boardNum) {
+      const board = this.state.board.slice();
+
+      // Do nothing if game is done.
+      if (calculateWinner(board[boardNum]) || board[boardNum][i]) {
+        return;
+      }
+      // Do Nothing if board is not proper board to play next move.
+      if (!this.state.boardPlayable[boardNum]) {
+        return;
+      }
+
+      // Otherwise handle normally
+      // Set the next playable board:
+      var boardP = Array(9).fill(0);
+      boardP[i] = "playable";
+
+      board[boardNum][i] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
+        squares: board,
+        boardPlayable: boardP,
+        xIsNext: !this.state.xIsNext,
+      });
+    }
+
   render() {
+
+    const winner = calculateWinner(this.state.board[0]);
+    let status;
+
+    // Set status based on whether or not game is over
+    if (winner) { status = 'Winner: ' + winner; }
+    else { status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');}
+
     return (
       <div className="game">
-        <div className="game-board">
-          <Board /> <Board /> <Board />
-        </div>
+        <table class = "center">
+          <tr>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[0]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {0}
+                playable = {this.state.boardPlayable[0]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[1]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {1}
+                playable = {this.state.boardPlayable[1]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[2]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {2}
+                playable = {this.state.boardPlayable[2]}
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[3]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {3}
+                playable = {this.state.boardPlayable[3]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[4]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {4}
+                playable = {this.state.boardPlayable[4]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[5]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {5}
+                playable = {this.state.boardPlayable[5]}
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[6]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {6}
+                playable = {this.state.boardPlayable[6]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[7]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {7}
+                playable = {this.state.boardPlayable[7]}
+              />
+            </td>
+            <td className="game-board">
+              <Board
+                squares={this.state.board[8]}
+                onClick={(i, boardNum) => this.handleClick(i, boardNum)}
+                boardNum = {8}
+                playable = {this.state.boardPlayable[8]}
+              />
+            </td>
+          </tr>
+        </table>
+
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{status}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
@@ -114,7 +213,7 @@ class Game extends React.Component {
 /*****************************************************************************
  * Helper function for checking if an individual board has been won          *
  *****************************************************************************/
-function calculateWinner(squares) {
+function calculateWinner(square) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -127,8 +226,8 @@ function calculateWinner(squares) {
   ];
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+    if (square[a] && square[a] === square[b] && square[a] === square[c]) {
+      return square[a];
     }
   }
   return null;

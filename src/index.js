@@ -2,8 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// SQUARE:
-// Functional component for rendering individual squares in a tic-tac-toe game
+/******************************************************************************
+ * -- SQUARE --                                                               *
+ *    Functional component for rendering individual squares in a              *
+ *    tic-tac-toe game                                                        *
+ *****************************************************************************/
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -12,7 +16,13 @@ function Square(props) {
   );
 }
 
-// BOARD:
+/*****************************************************************************/
+
+/******************************************************************************
+ * -- BOARD --                                                                *
+ *    Class for rendering a single tic-tac-toe board                          *
+ *****************************************************************************/
+
 class Board extends React.Component {
 // Board Constructor with 9 empty values corresponding to squares
   constructor(props) {
@@ -25,7 +35,6 @@ class Board extends React.Component {
 
   handleClick(i) {
     const squares = this.state.squares.slice();
-
     // Do nothing if game is done.
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -77,6 +86,13 @@ class Board extends React.Component {
   }
 }
 
+/*****************************************************************************/
+
+/******************************************************************************
+ * -- GAME --                                                                 *
+ *    Class for rendering and tracking an entire game of 9-board              *
+ *****************************************************************************/
+
 class Game extends React.Component {
   render() {
     return (
@@ -93,7 +109,11 @@ class Game extends React.Component {
   }
 }
 
-// Helper function for checking if an individual board has been won
+/*****************************************************************************/
+
+/*****************************************************************************
+ * Helper function for checking if an individual board has been won          *
+ *****************************************************************************/
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -114,7 +134,9 @@ function calculateWinner(squares) {
   return null;
 }
 
-// ========================================
+/*****************************************************************************/
+
+/*****************************************************************************/
 
 ReactDOM.render(
   <Game />,

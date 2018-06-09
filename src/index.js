@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+var gameOver = 0;
+
 /******************************************************************************
  * -- SQUARE --                                                               *
  *    Functional component for rendering individual squares in a              *
@@ -75,7 +77,7 @@ class Game extends React.Component {
 
       this.state = {
         board: squares,
-        boardPlayable: Array(9).fill("1"),
+        boardPlayable: Array(9).fill("gamestart"),
         xIsNext: true,
       };
     }
@@ -83,10 +85,6 @@ class Game extends React.Component {
     handleClick(i, boardNum) {
       const board = this.state.board.slice();
 
-      // Do nothing if game is done.
-      if (calculateWinner(board[boardNum]) || board[boardNum][i]) {
-        return;
-      }
       // Do Nothing if board is not proper board to play next move.
       if (!this.state.boardPlayable[boardNum]) {
         return;
@@ -103,11 +101,17 @@ class Game extends React.Component {
         boardPlayable: boardP,
         xIsNext: !this.state.xIsNext,
       });
+
+      // Do nothing if game is done.
+      if (calculateWinner(board[boardNum], board[boardNum][i])) {
+        return;
+      }
+
     }
 
   render() {
 
-    const winner = calculateWinner(this.state.board[0]);
+    const winner = calculateWinner(this.state.board[0], 'Computer Won');
     let status;
 
     // Set status based on whether or not game is over
@@ -213,7 +217,7 @@ class Game extends React.Component {
 /*****************************************************************************
  * Helper function for checking if an individual board has been won          *
  *****************************************************************************/
-function calculateWinner(square) {
+function calculateWinner(square, phrase) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -224,14 +228,26 @@ function calculateWinner(square) {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (square[a] && square[a] === square[b] && square[a] === square[c]) {
+      gameOver = 1;  // Global variable.
+      ReactDOM.render(
+        <h1 class = "gameover"> GAME OVER!!! {phrase} WON!</h1>,
+        document.getElementById('root')
+      );
       return square[a];
     }
   }
   return null;
 }
+
+/*****************************************************************************/
+
+/*****************************************************************************
+ * Helper function to generate the next move for the AI                      *
+ *****************************************************************************/
 
 /*****************************************************************************/
 

@@ -29,10 +29,6 @@ ol, ul {
   outline: none;
 }
 
-.square:hover {
-  border: 3px solid #000aff;
-}
-
 .kbd-navigation .square:focus {
   background: #ddd;
 }
@@ -57,6 +53,21 @@ ol, ul {
   margin-left: 1vw;
 }
 
+.gameover {
+
+  font-size: 10vw;
+  text-align: center;
+  text-decoration: underline;
+}
+
 .playable {
-  background: 2px #0001ff;
+  background: 3px #00b8fc;
+}
+
+.playable .square:hover {
+   border: 6px solid #ff4500;
+}
+
+ .square:hover {
+  border: 6px solid #ff4500;
 }

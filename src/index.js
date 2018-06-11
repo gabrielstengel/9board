@@ -69,7 +69,6 @@ class Game extends React.Component {
   // Game constructor keeps track of 9 individual tic-tac-toe games
   constructor(props) {
       super(props);
-
       var squares = [];
       for (let i = 0; i < 9; i++) {
         squares[i] = Array(9).fill(null);
@@ -106,6 +105,10 @@ class Game extends React.Component {
       if (calculateWinner(board[boardNum], board[boardNum][i])) {
         return;
       }
+
+    }
+
+    nextMoveAI () {
 
     }
 
@@ -212,6 +215,46 @@ class Game extends React.Component {
   }
 }
 
+/*****************************************************************************
+ * -- START SCREEN --                                                        *
+ *    Class for rendering the start (and restart screen)                     *
+ *****************************************************************************/
+
+class StartScreen extends React.Component {
+
+    handleClickComp() {
+      ReactDOM.render(
+        <Game/ >,
+        document.getElementById('root')
+      );
+    }
+
+
+      render () {
+        return (
+          <div class = "startScreen">
+            <h1>9-Board</h1>
+            <p1>
+              Created by Gabriel Stengel
+            </p1>
+            <h2></h2>
+            <button  class = "restart" onClick = {this.handleClickComp}> Play Computer </button>
+            <button class = "restart"> Play Friend </button>
+            <article>
+              9-Board is a sophisticated version of normal tic-tac-toe.
+              There are nine classic boards, 3-by-3 tic-tac-toe boards make up a 3-by-3
+              array. Players take turns making marks (human 'X', computer 'O') in the
+              ordinary tic-tac-toe boards. The first mark can appear anywhere. Each
+              subsequent mark gets made in any un-marked spot in the ordinary board that
+               corresponds to the spot where the previous mark got made. The usual
+               3-in-a-row arrangement of marks in any of the 9 ordinary boards wins.
+            </article>
+          </div>
+        );
+      }
+}
+
+
 /*****************************************************************************/
 
 /*****************************************************************************
@@ -233,8 +276,9 @@ function calculateWinner(square, phrase) {
     const [a, b, c] = lines[i];
     if (square[a] && square[a] === square[b] && square[a] === square[c]) {
       gameOver = 1;  // Global variable.
+
       ReactDOM.render(
-        <h1 class = "gameover"> GAME OVER!!! {phrase} WON!</h1>,
+        <StartScreen/ >,
         document.getElementById('root')
       );
       return square[a];
@@ -254,6 +298,6 @@ function calculateWinner(square, phrase) {
 /*****************************************************************************/
 
 ReactDOM.render(
-  <Game />,
+  <StartScreen/ >,
   document.getElementById('root')
 );
